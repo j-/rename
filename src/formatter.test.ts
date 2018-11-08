@@ -25,6 +25,11 @@ it('can format simple var', () => {
 	expect(actual).toBe('Hello WORLD');
 });
 
+it('can format multiple vars', () => {
+	const actual = formatter.format('Hello %world foo%foo');
+	expect(actual).toBe('Hello WORLD foobar');
+});
+
 xit('can format complex var', () => {
 	const actual = formatter.format('Hello %worlds');
 	expect(actual).toBe('Hello WORLD$');

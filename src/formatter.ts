@@ -51,7 +51,6 @@ export class Formatter {
 					if (rule) {
 						result += rule[1]();
 						current = '';
-						cursor++;
 						break;
 					}
 					cursor++;
