@@ -12,18 +12,18 @@ export class Renamer {
 	constructor (file: File) {
 		this.file = file;
 		this.formatter = new Formatter([
-			['name', () => this.name],
-			['basename', () => this.basename],
-			['YYYY', () => format(this.lastModified, 'YYYY')],
-			['MM', () => format(this.lastModified, 'MM')],
-			['DD', () => format(this.lastModified, 'DD')],
-			['HH', () => format(this.lastModified, 'HH')],
-			['mm', () => format(this.lastModified, 'mm')],
-			['ss', () => format(this.lastModified, 'ss')],
-			['SSS', () => format(this.lastModified, 'SSS')],
-			['Z', () => format(this.lastModified, 'Z')],
-			['ext', () => this.ext],
-			['dotext', () => this.dotext],
+			['name',        () => this.name],
+			['basename',    () => this.basename],
+			['YYYY',        () => format(this.lastModified, 'YYYY')],
+			['MM',          () => format(this.lastModified, 'MM')],
+			['DD',          () => format(this.lastModified, 'DD')],
+			['HH',          () => format(this.lastModified, 'HH')],
+			['mm',          () => format(this.lastModified, 'mm')],
+			['ss',          () => format(this.lastModified, 'ss')],
+			['SSS',         () => format(this.lastModified, 'SSS')],
+			['Z',           () => format(this.lastModified, 'Z')],
+			['ext',         () => this.ext],
+			['dotext',      () => this.dotext],
 		]);
 	}
 
