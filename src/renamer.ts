@@ -1,4 +1,5 @@
 import * as format from 'date-fns/format';
+import { Formatter } from './formatter';
 
 export class Renamer {
 	static clean (filename: string) {
@@ -6,9 +7,23 @@ export class Renamer {
 	}
 
 	private file: File;
+	private formatter: Formatter;
 
 	constructor (file: File) {
 		this.file = file;
+		this.formatter = new Formatter([
+			['basename', () => this.basename],
+			['YYYY', () => format(this.lastModified, 'YYYY')],
+			['MM', () => format(this.lastModified, 'MM')],
+			['DD', () => format(this.lastModified, 'DD')],
+			['HH', () => format(this.lastModified, 'HH')],
+			['mm', () => format(this.lastModified, 'mm')],
+			['ss', () => format(this.lastModified, 'ss')],
+			['SSS', () => format(this.lastModified, 'SSS')],
+			['Z', () => format(this.lastModified, 'Z')],
+			['ext', () => this.ext],
+			['dotext', () => this.dotext],
+		]);
 	}
 
 	public get name () {
@@ -21,42 +36,6 @@ export class Renamer {
 
 	public get type () {
 		return this.file.type;
-	}
-
-	public get iso () {
-		return format(this.lastModified, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-	}
-
-	public get YYYY () {
-		return format(this.lastModified, 'YYYY');
-	}
-
-	public get MM () {
-		return format(this.lastModified, 'MM');
-	}
-
-	public get DD () {
-		return format(this.lastModified, 'DD');
-	}
-
-	public get HH () {
-		return format(this.lastModified, 'HH');
-	}
-
-	public get mm () {
-		return format(this.lastModified, 'mm');
-	}
-
-	public get ss () {
-		return format(this.lastModified, 'ss');
-	}
-
-	public get SSS () {
-		return format(this.lastModified, 'SSS');
-	}
-
-	public get Z () {
-		return format(this.lastModified, 'Z');
 	}
 
 	public get ext () {
@@ -84,18 +63,7 @@ export class Renamer {
 
 	public format (format: string) {
 		return Renamer.clean(
-			format
-				.replace(/%YYYY/g, () => this.YYYY)
-				.replace(/%MM/g, () => this.MM)
-				.replace(/%DD/g, () => this.DD)
-				.replace(/%HH/g, () => this.HH)
-				.replace(/%mm/g, () => this.mm)
-				.replace(/%ss/g, () => this.ss)
-				.replace(/%SSS/g, () => this.SSS)
-				.replace(/%Z/g, () => this.Z)
-				.replace(/%basename/g, () => this.basename)
-				.replace(/%ext/g, () => this.ext)
-				.replace(/%dotext/g, () => this.dotext)
+			this.formatter.format(format)
 		);
 	}
 }
