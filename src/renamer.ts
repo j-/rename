@@ -39,7 +39,7 @@ export class Renamer {
 	}
 
 	public get ext () {
-		const match = this.name.match(/\.(.*)$/);
+		const match = this.name.match(/\.([^.]*)$/);
 		return match ? match[1] : '';
 	}
 
