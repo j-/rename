@@ -12,6 +12,7 @@ export class Renamer {
 	constructor (file: File) {
 		this.file = file;
 		this.formatter = new Formatter([
+			['name', () => this.name],
 			['basename', () => this.basename],
 			['YYYY', () => format(this.lastModified, 'YYYY')],
 			['MM', () => format(this.lastModified, 'MM')],
