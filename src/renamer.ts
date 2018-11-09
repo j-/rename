@@ -1,5 +1,5 @@
 import * as format from 'date-fns/format';
-import { Formatter } from './formatter';
+import { Formatter, FormatterRule } from './formatter';
 
 export class Renamer {
 	static clean (filename: string) {
@@ -25,6 +25,10 @@ export class Renamer {
 			['ext',         () => this.ext],
 			['dotext',      () => this.dotext],
 		]);
+	}
+
+	public addRule ([pattern, handler]: FormatterRule) {
+		this.formatter.addRule(pattern, handler);
 	}
 
 	public get name () {
