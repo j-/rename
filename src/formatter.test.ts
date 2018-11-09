@@ -34,3 +34,10 @@ it('can format complex var', () => {
 	const actual = formatter.format('Hello %worlds');
 	expect(actual).toBe('Hello WORLD$');
 });
+
+it('can add new rules', () => {
+	formatter.addRule('forecast', () => 'sunny');
+	formatter.addRule('temperature', () => 21);
+	const actual = formatter.format('Today is %forecast and %temperature degrees C');
+	expect(actual).toBe('Today is sunny and 21 degrees C');
+});
