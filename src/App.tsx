@@ -15,6 +15,7 @@ interface State {
 
 export default class App extends React.Component<Props, State> {
 	private renamer: Renamer;
+	private count: number = 0;
 
 	state: State = {
 		url: null,
@@ -109,6 +110,8 @@ export default class App extends React.Component<Props, State> {
 		});
 		reader.readAsArrayBuffer(file);
 		this.renamer = new Renamer(file);
+		const count = this.count++;
+		this.renamer.addRule(['count', () => count]);
 	}
 
 	private handleFormatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
