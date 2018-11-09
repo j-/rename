@@ -45,7 +45,7 @@ export class Formatter {
 				}
 				let current = '';
 				cursor++;
-				while (cursor < format.length) {
+				while (cursor < format.length && format[cursor] !== '%') {
 					current += format[cursor];
 					const rule = this.getRule(current);
 					if (rule) {
