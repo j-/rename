@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect, MapDispatchToProps } from 'react-redux';
 import { addFile } from '../store/actions';
+import { FileSystemEntry, FileSystemDirectoryEntry, FileSystemFileEntry } from '../file-system';
 
 interface StateProps {
 
@@ -24,6 +25,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = {
 	addFile,
 };
 
+/** TODO: Clean up this implementation. */
 class FileDropper extends React.Component<Props> {
 	componentDidMount () {
 		window.addEventListener('dragover', this.handleDragover);
@@ -49,17 +51,44 @@ class FileDropper extends React.Component<Props> {
 		if (!dataTransfer) {
 			return;
 		}
-		const { files } = dataTransfer;
+		const { files, items } = dataTransfer;
 		if (!files || !files.length) {
 			return;
 		}
+		const { addFile } = this.props;
+		// Handle files attached to the data transfer object
 		for (const file of Array.from(files)) {
 			const reader = new FileReader();
 			reader.addEventListener('load', () => {
 				const url = URL.createObjectURL(file);
-				this.props.addFile(file, url);
+				addFile(file, url);
 			});
 			reader.readAsArrayBuffer(file);
+		}
+		// Get file system entries when dropping directories
+		for (const item of Array.from(items)) {
+			if (typeof item.webkitGetAsEntry !== 'function') {
+				continue;
+			}
+			const entry = item.webkitGetAsEntry() as FileSystemEntry;
+			if (entry.isDirectory) {
+				const reader = (entry as FileSystemDirectoryEntry).createReader();
+				reader.readEntries((results) => {
+					for (const result of results) {
+						if (!result.isFile) {
+							continue;
+						}
+						(result as FileSystemFileEntry).file((file) => {
+							const reader = new FileReader();
+							reader.addEventListener('load', () => {
+								const url = URL.createObjectURL(file);
+								addFile(file, url);
+							});
+							reader.readAsArrayBuffer(file);
+						});
+					}
+				});
+			}
 		}
 	}
 }
