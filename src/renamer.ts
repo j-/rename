@@ -2,8 +2,39 @@ import * as format from 'date-fns/format';
 import { Formatter, FormatterRule } from './formatter';
 
 export class Renamer {
+	/**
+	 * 1. The forbidden printable ASCII characters are:
+	 *
+	 *    * Linux/Unix:
+	 *
+	 *      - `/` (forward slash)
+	 *
+	 *    * Windows:
+	 *
+	 *      - `<` (less than)
+	 *      - `>` (greater than)
+	 *      - `:` (colon - sometimes works, but is actually NTFS Alternate Data Streams)
+	 *      - `"` (double quote)
+	 *      - `/` (forward slash)
+	 *      - `\` (backslash)
+	 *      - `|` (vertical bar or pipe)
+	 *      - `?` (question mark)
+	 *      - `*` (asterisk)
+	 *
+	 * 2. Non-printable characters:
+	 *
+	 *    * Linux/Unix:
+	 *
+	 *      - 0 (NULL byte)
+	 *
+	 *    * Windows:
+	 *
+	 *      - 0-31 (ASCII control characters)
+	 *
+	 * @see https://stackoverflow.com/a/31976060
+	 */
 	static clean (filename: string) {
-		return filename.replace(/[:]/g, '_');
+		return filename.replace(/[\u0000-\u001f\u0022\u002a\u002f\u003a\u003c\u003e\u003f\u005c\u007c]/g, '_');
 	}
 
 	private file: File;
