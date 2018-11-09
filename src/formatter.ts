@@ -1,7 +1,7 @@
 export type FormatterPattern = string;
 
 export interface FormatterHandler {
-	(): string;
+	(): string | number;
 }
 
 export interface FormatterRule extends Array<FormatterPattern | FormatterHandler> {
@@ -49,7 +49,7 @@ export class Formatter {
 					current += format[cursor];
 					const rule = this.getRule(current);
 					if (rule) {
-						result += rule[1]();
+						result += String(rule[1]());
 						current = '';
 						break;
 					}
