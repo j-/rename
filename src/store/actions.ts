@@ -14,11 +14,11 @@ export const isActionAddFile = (action: Action): action is ActionAddFile => (
 	action.type === 'AddFile'
 );
 
-export const addFile = (file: File, url: string): ActionAddFile => ({
+export const addFile = (file: File): ActionAddFile => ({
 	type: 'AddFile',
 	data: {
 		file,
-		url,
+		url: URL.createObjectURL(file),
 	},
 });
 

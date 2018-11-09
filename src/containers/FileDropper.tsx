@@ -14,7 +14,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-	addFile: (file: File, url: string) => void;
+	addFile: (file: File) => void;
 }
 
 interface OwnProps {
@@ -83,8 +83,7 @@ class FileDropper extends React.Component<Props> {
 	}
 
 	private handleFile = (file: File) => {
-		const url = URL.createObjectURL(file);
-		this.props.addFile(file, url);
+		this.props.addFile(file);
 	}
 }
 
