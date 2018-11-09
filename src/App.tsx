@@ -13,6 +13,14 @@ interface State {
 	format: string;
 }
 
+const exampleFile = new File([], 'example.png', {
+	lastModified: Date.now(),
+	type: 'image/png',
+});
+
+const exampleRenamer = new Renamer(exampleFile);
+exampleRenamer.addRule(['count', () => 1]);
+
 export default class App extends React.Component<Props, State> {
 	private renamer: Renamer;
 	private count: number = 0;
@@ -47,6 +55,10 @@ export default class App extends React.Component<Props, State> {
 					onChange={this.handleFormatChange}
 				/>
 
+				<h3>Example</h3>
+
+				{this.renderExampleFormat()}
+
 				<h2>Output</h2>
 
 				{this.renderFile()}
@@ -69,6 +81,24 @@ export default class App extends React.Component<Props, State> {
 			>
 				{name}
 			</a>
+		);
+	}
+
+	private renderExampleFormat() {
+		return (
+			<div className="App-example-format">
+				<span className="App-example-format-input">
+					{exampleFile.name}
+				</span>
+				<span className="App-example-format-transform-indicator">
+					&nbsp;
+					&rarr;
+					&nbsp;
+				</span>
+				<span className="App-example-format-output">
+					{exampleRenamer.format(this.state.format)}
+				</span>
+			</div>
 		);
 	}
 
