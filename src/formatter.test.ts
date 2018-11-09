@@ -30,7 +30,7 @@ it('can format multiple vars', () => {
 	expect(actual).toBe('Hello WORLD foobar');
 });
 
-xit('can format complex var', () => {
+it('can format complex var', () => {
 	const actual = formatter.format('Hello %worlds');
 	expect(actual).toBe('Hello WORLD$');
 });

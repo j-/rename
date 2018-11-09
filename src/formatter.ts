@@ -49,9 +49,15 @@ export class Formatter {
 					current += format[cursor];
 					const rule = this.getRule(current);
 					if (rule) {
-						result += String(rule[1]());
-						current = '';
-						break;
+						// Rule was found with this pattern
+						const next = current + format[cursor + 1];
+						const possible = this.getPossibleRules(next);
+						if (possible.length === 0) {
+							// No other rules partially match this pattern
+							result += String(rule[1]());
+							current = '';
+							break;
+						}
 					}
 					cursor++;
 				}
