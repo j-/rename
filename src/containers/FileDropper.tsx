@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { connect, MapDispatchToProps } from 'react-redux';
 import { addFile } from '../store/actions';
-import { FileSystemEntry, FileSystemDirectoryEntry, FileSystemFileEntry } from '../file-system';
+
+import {
+	FileSystemEntry,
+	FileSystemFileEntry,
+	FileSystemDirectoryEntry,
+	FileSystemDirectoryReader,
+} from '../file-system';
 
 interface StateProps {
 
@@ -25,7 +31,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = {
 	addFile,
 };
 
-/** TODO: Clean up this implementation. */
 class FileDropper extends React.Component<Props> {
 	componentDidMount () {
 		window.addEventListener('dragover', this.handleDragover);
@@ -52,44 +57,34 @@ class FileDropper extends React.Component<Props> {
 			return;
 		}
 		const { files, items } = dataTransfer;
-		if (!files || !files.length) {
-			return;
-		}
-		const { addFile } = this.props;
-		// Handle files attached to the data transfer object
-		for (const file of Array.from(files)) {
-			const reader = new FileReader();
-			reader.addEventListener('load', () => {
-				const url = URL.createObjectURL(file);
-				addFile(file, url);
-			});
-			reader.readAsArrayBuffer(file);
-		}
-		// Get file system entries when dropping directories
-		for (const item of Array.from(items)) {
-			if (typeof item.webkitGetAsEntry !== 'function') {
-				continue;
-			}
-			const entry = item.webkitGetAsEntry() as FileSystemEntry;
-			if (entry.isDirectory) {
-				const reader = (entry as FileSystemDirectoryEntry).createReader();
-				reader.readEntries((results) => {
-					for (const result of results) {
-						if (!result.isFile) {
-							continue;
-						}
-						(result as FileSystemFileEntry).file((file) => {
-							const reader = new FileReader();
-							reader.addEventListener('load', () => {
-								const url = URL.createObjectURL(file);
-								addFile(file, url);
-							});
-							reader.readAsArrayBuffer(file);
-						});
-					}
+		this.handleDataTransferFileList(files);
+		this.handleDataTransferItemList(items);
+	}
+
+	private handleDataTransferFileList = (fileList: FileList) => {
+		Array.from(fileList)
+			.filter((file) => file.type)
+			.map(this.handleFile);
+	}
+
+	private handleDataTransferItemList = (itemList: DataTransferItemList) => {
+		Array.from(itemList)
+			.filter((item: DataTransferItem) => typeof item.webkitGetAsEntry === 'function')
+			.map((item: DataTransferItem) => item.webkitGetAsEntry())
+			.filter((entry: FileSystemEntry) => entry.isDirectory)
+			.map((entry: FileSystemDirectoryEntry) => entry.createReader())
+			.forEach((reader: FileSystemDirectoryReader) => {
+				reader.readEntries((results: FileSystemEntry[]) => {
+					Array.from(results)
+						.filter((result: FileSystemEntry) => result.isFile)
+						.forEach((entry: FileSystemFileEntry) => entry.file(this.handleFile));
 				});
-			}
-		}
+			});
+	}
+
+	private handleFile = (file: File) => {
+		const url = URL.createObjectURL(file);
+		this.props.addFile(file, url);
 	}
 }
 
