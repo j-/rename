@@ -18,10 +18,13 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",
+    "@types/jest-each": "^0.3.2",
     "@types/node": "^10.12.3",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
     "gh-pages": "^2.0.1",
+    "jest": "^23.3.0",
+    "jest-each": "^23.6.0",
     "typescript": "^3.1.6"
   },
   "description": "Rename files with a pattern",
