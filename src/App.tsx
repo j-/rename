@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Renamer } from './renamer';
+import { Renamer, getInvalidCharacterExpression } from './renamer';
 import { setDownloadURL } from './download';
 import './App.css';
 
@@ -11,6 +11,7 @@ interface State {
 	url: string | null;
 	file: File | null;
 	format: string;
+	isInvalid: boolean;
 }
 
 const exampleFile = new File([], 'example.png', {
@@ -29,6 +30,7 @@ export default class App extends React.Component<Props, State> {
 		url: null,
 		file: null,
 		format: '%basename_%YYYY-%MM-%DD_%HH-%mm-%ss%dotext',
+		isInvalid: false,
 	};
 
 	componentDidMount () {
@@ -42,6 +44,7 @@ export default class App extends React.Component<Props, State> {
 	}
 
 	render () {
+		const { format, isInvalid } = this.state;
 		return (
 			<div className="App">
 				<h1>Rename</h1>
@@ -51,9 +54,11 @@ export default class App extends React.Component<Props, State> {
 				<input
 					className="App-format"
 					type="text"
-					value={this.state.format}
+					value={format}
 					onChange={this.handleFormatChange}
 				/>
+
+				{isInvalid && <p>Contains invalid characters which will be removed.</p>}
 
 				<h3>Example</h3>
 
@@ -145,8 +150,12 @@ export default class App extends React.Component<Props, State> {
 	}
 
 	private handleFormatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const format = e.currentTarget.value;
+		const invalidExpression = getInvalidCharacterExpression();
+		const isInvalid = invalidExpression.test(format);
 		this.setState({
-			format: e.currentTarget.value,
+			format,
+			isInvalid,
 		});
 	}
 
