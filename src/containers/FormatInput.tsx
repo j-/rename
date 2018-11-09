@@ -1,4 +1,4 @@
-import { connect, MapStateToProps, MapDispatchToProps } from 'react-redux';
+import { connect, MapStateToProps, MapDispatchToProps, MergeProps } from 'react-redux';
 import Input, { Props as P } from '../components/Input';
 import { RootReducerState, getFormat } from '../store';
 import { setFormat } from '../store/actions';
@@ -15,7 +15,15 @@ const mapDispatchToProps: MapDispatchToProps<P, P> = (dispatch) => ({
 	),
 });
 
+const mergeProps: MergeProps<P, P, P, P> = (state, dispatch, own) => ({
+	...state,
+	...dispatch,
+	...own,
+	className: 'form-control',
+});
+
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
+	mergeProps,
 )(Input);

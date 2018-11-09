@@ -6,10 +6,12 @@ import ExampleFormat from '../containers/ExampleFormat';
 import FileDownloadList from '../containers/FileDownloadList';
 
 const App: React.StatelessComponent = () => (
-	<div className="App">
+	<div className="App container">
 		<FileDropper />
 
 		<h1>Rename</h1>
+
+		<p>Drag+drop files into this window.</p>
 
 		<h2>Format</h2>
 
