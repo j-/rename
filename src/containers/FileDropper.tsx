@@ -71,7 +71,7 @@ class FileDropper extends React.Component<Props> {
 		Array.from(itemList)
 			.filter((item: DataTransferItem) => typeof item.webkitGetAsEntry === 'function')
 			.map((item: DataTransferItem) => item.webkitGetAsEntry())
-			.filter((entry: FileSystemEntry) => entry.isDirectory)
+			.filter((entry: FileSystemEntry) => entry && entry.isDirectory)
 			.map((entry: FileSystemDirectoryEntry) => entry.createReader())
 			.forEach((reader: FileSystemDirectoryReader) => {
 				reader.readEntries((results: FileSystemEntry[]) => {
