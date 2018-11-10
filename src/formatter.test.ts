@@ -41,3 +41,10 @@ it('can add new rules', () => {
 	const actual = formatter.format('Today is %forecast and %temperature degrees C');
 	expect(actual).toBe('Today is sunny and 21 degrees C');
 });
+
+it('is case sensitive', () => {
+	formatter.addRule('A', () => 'PM');
+	formatter.addRule('a', () => 'pm');
+	const actual = formatter.format('It\'s already 11 %a? 11 %A!!');
+	expect(actual).toBe('It\'s already 11 pm? 11 PM!!');
+});
