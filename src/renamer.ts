@@ -57,8 +57,11 @@ export class Renamer {
 			['ss',          () => format(this.lastModified, 'ss')],
 			['SSS',         () => format(this.lastModified, 'SSS')],
 			['Z',           () => format(this.lastModified, 'Z')],
+			['A',           () => format(this.lastModified, 'A')],
+			['a',           () => format(this.lastModified, 'a')],
 			['ext',         () => this.ext],
 			['dotext',      () => this.dotext],
+			['unix',        () => this.lastModified],
 		]);
 	}
 
