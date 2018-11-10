@@ -62,6 +62,12 @@ export class Renamer {
 			['ext',         () => this.ext],
 			['dotext',      () => this.dotext],
 			['unix',        () => this.lastModified],
+			['type',        () => this.type],
+			// TODO: Implement image dimensions detection
+			['width',       () => 0],
+			['height',      () => 0],
+			// TODO: Implement file size detection
+			['size',        () => 0],
 		]);
 	}
 
